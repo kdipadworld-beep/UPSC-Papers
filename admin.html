@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPSC Paper Manager - Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #f5f3f0 0%, #faf8f6 100%);
+      color: #2c2c2a;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #1a1a18;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888780;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 2rem;
+      border-bottom: 0.5px solid #d3d1c7;
+      padding-bottom: 1rem;
+    }
+
+    .nav-btn {
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #888780;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-btn.active {
+      color: #2c2c2a;
+      border-bottom-color: #2c2c2a;
+    }
+
+    .nav-btn:hover {
+      color: #1a1a18;
+    }
+
+    .card {
+      background: white;
+      border: 0.5px solid #d3d1c7;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #5f5e5a;
+    }
+
+    .required {
+      color: #e24b4a;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 0.5px solid #b4b2a9;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    input[type="url"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2c2c2a;
+      box-shadow: 0 0 0 2px rgba(44, 44, 42, 0.1);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-section {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 0.5px solid #d3d1c7;
+    }
+
+    .form-section:last-child {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: #5f5e5a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title i {
+      font-size: 16px;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #888780;
+      margin-top: 6px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: 0.5px solid #b4b2a9;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+      color: #2c2c2a;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button:hover {
+      border-color: #2c2c2a;
+      background: #f5f3f0;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: #f5f3f0;
+      border-color: #b4b2a9;
+    }
+
+    .btn-danger {
+      color: #a32d2d;
+      border-color: #a32d2d;
+    }
+
+    .btn-danger:hover {
+      background: #fcebeb;
+    }
+
+    .recent-records {
+      margin-top: 2rem;
+    }
+
+    .record-item {
+      background: white;
+      border: 0.5px solid #d3d1c7;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .record-item:hover {
+      border-color: #2c2c2a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .record-info h4 {
+      margin: 0 0 4px 0;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .record-info p {
+      margin: 0;
+      font-size: 12px;
+      color: #888780;
+    }
+
+    .record-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .record-actions button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #888780;
+    }
+
+    .empty-state i {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .stats {
+      font-size: 12px;
+      color: #888780;
+      margin-top: 1rem;
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 13px;
+    }
+
+    .alert-info {
+      background: #e6f1fb;
+      color: #185fa5;
+      border: 0.5px solid #85b7eb;
+    }
+
+    .alert-error {
+      background: #fcebeb;
+      color: #a32d2d;
+      border: 0.5px solid #f09595;
+    }
+
+    .alert-success {
+      background: #eaf3de;
+      color: #3b6d11;
+      border: 0.5px solid #97c459;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .record-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .record-actions {
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      .button-group {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📝 UPSC Paper Manager</h1>
+      <p class="subtitle">Admin Dashboard - Data Entry & Management</p>
+    </header>
+
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="openAdmin()">
+        <i class="fas fa-plus"></i> Admin (Data Entry)
+      </button>
+      <button class="nav-btn" onclick="openViewer()">
+        <i class="fas fa-eye"></i> Viewer (Read-Only)
+      </button>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <!-- FORM SECTION -->
+    <div class="card">
+      <h2 id="formTitle">Add New Paper Record</h2>
+
+      <form id="paperForm" onsubmit="handleSubmit(event)">
+        <!-- Date, Subject, Paper -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="date">Date <span class="required">*</span></label>
+            <input type="date" id="date" name="date" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject <span class="required">*</span></label>
+            <input type="text" id="subject" name="subject" placeholder="e.g., Indian Society, Ethics, PSIR" required>
+          </div>
+          <div class="form-group">
+            <label for="paper">Paper <span class="required">*</span></label>
+            <input type="text" id="paper" name="paper" placeholder="e.g., GS1, GS4, Optional" required>
+          </div>
+        </div>
+
+        <!-- Google Drive Links Section -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <i class="fas fa-link"></i> Google Drive Links
+          </h3>
+
+          <div class="form-group">
+            <label for="uncheckedLink">Unchecked Paper Link</label>
+            <input type="url" id="uncheckedLink" name="uncheckedLink" placeholder="https://drive.google.com/...">
+            <p class="helper-text">Paste Google Drive link to your original answer sheet</p>
+          </div>
+
+          <div class="form-group">
+            <label for="checkedLink">Checked Paper Link</label>
+            <input type="url" id="checkedLink" name="checkedLink" placeholder="https://drive.google.com/...">
+            <p class="helper-text">Paste Google Drive link to your checked/marked answer sheet</p>
+          </div>
+
+          <div class="form-group">
+            <label for="aiAnalysisLink">AI Analysis Link</label>
+            <input type="url" id="aiAnalysisLink" name="aiAnalysisLink" placeholder="https://drive.google.com/...">
+            <p class="helper-text">Paste Google Drive link to the AI analysis document</p>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <button type="button" id="cancelBtn" class="btn-danger" onclick="resetForm()" style="display: none;">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-check"></i> <span id="submitText">Add Record</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="stats">
+        <strong>Total Records:</strong> <span id="totalRecords">0</span>
+      </div>
+    </div>
+
+    <!-- RECENT RECORDS SECTION -->
+    <div class="recent-records">
+      <h2>Recent Records</h2>
+      <div id="recentRecordsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    let allPapers = [];
+    let editingId = null;
+
+    // Load data on page load
+    async function loadData() {
+      try {
+        const result = await window.storage.get('upsc-papers');
+        if (result) {
+          allPapers = JSON.parse(result.value);
+        }
+      } catch (error) {
+        console.log('No existing data');
+      }
+      displayRecentRecords();
+      updateStats();
+    }
+
+    // Save data to persistent storage
+    async function saveData() {
+      try {
+        await window.storage.set('upsc-papers', JSON.stringify(allPapers));
+        displayRecentRecords();
+        updateStats();
+      } catch (error) {
+        showAlert('Error saving data: ' + error.message, 'error');
+      }
+    }
+
+    // Handle form submission
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      const date = document.getElementById('date').value;
+      const subject = document.getElementById('subject').value;
+      const paper = document.getElementById('paper').value;
+      const uncheckedLink = document.getElementById('uncheckedLink').value;
+      const checkedLink = document.getElementById('checkedLink').value;
+      const aiAnalysisLink = document.getElementById('aiAnalysisLink').value;
+
+      if (!date || !subject || !paper) {
+        showAlert('Please fill in all required fields (Date, Subject, Paper)', 'error');
+        return;
+      }
+
+      const newRecord = {
+        id: editingId || Date.now().toString(),
+        date,
+        subject,
+        paper,
+        uncheckedLink,
+        checkedLink,
+        aiAnalysisLink
+      };
+
+      if (editingId) {
+        // Update existing
+        allPapers = allPapers.map(p => p.id === editingId ? newRecord : p);
+        showAlert('Record updated successfully!', 'success');
+        editingId = null;
+      } else {
+        // Add new
+        allPapers.push(newRecord);
+        showAlert('Record added successfully!', 'success');
+      }
+
+      saveData();
+      resetForm();
+    }
+
+    // Reset form
+    function resetForm() {
+      document.getElementById('paperForm').reset();
+      editingId = null;
+      document.getElementById('formTitle').textContent = 'Add New Paper Record';
+      document.getElementById('submitText').textContent = 'Add Record';
+      document.getElementById('cancelBtn').style.display = 'none';
+    }
+
+    // Edit record
+    function editRecord(id) {
+      const paper = allPapers.find(p => p.id === id);
+      if (paper) {
+        document.getElementById('date').value = paper.date;
+        document.getElementById('subject').value = paper.subject;
+        document.getElementById('paper').value = paper.paper;
+        document.getElementById('uncheckedLink').value = paper.uncheckedLink;
+        document.getElementById('checkedLink').value = paper.checkedLink;
+        document.getElementById('aiAnalysisLink').value = paper.aiAnalysisLink;
+
+        editingId = id;
+        document.getElementById('formTitle').textContent = 'Edit Paper Record';
+        document.getElementById('submitText').textContent = 'Update Record';
+        document.getElementById('cancelBtn').style.display = 'inline-flex';
+
+        window.scrollTo(0, 0);
+      }
+    }
+
+    // Delete record
+    function deleteRecord(id) {
+      if (confirm('Are you sure you want to delete this record?')) {
+        allPapers = allPapers.filter(p => p.id !== id);
+        saveData();
+        showAlert('Record deleted successfully!', 'success');
+      }
+    }
+
+    // Display recent records
+    function displayRecentRecords() {
+      const container = document.getElementById('recentRecordsContainer');
+
+      if (allPapers.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.5;">📭</div>
+            <p>No records yet. Add your first paper above!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const recent = [...allPapers].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+
+      container.innerHTML = recent.map(paper => `
+        <div class="record-item">
+          <div class="record-info">
+            <h4>${paper.subject} • ${paper.paper}</h4>
+            <p>${formatDate(paper.date)}</p>
+          </div>
+          <div class="record-actions">
+            <button type="button" onclick="editRecord('${paper.id}')" title="Edit">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button type="button" class="btn-danger" onclick="deleteRecord('${paper.id}')" title="Delete">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Update statistics
+    function updateStats() {
+      document.getElementById('totalRecords').textContent = allPapers.length;
+    }
+
+    // Show alert
+    function showAlert(message, type = 'info') {
+      const container = document.getElementById('alertContainer');
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.innerHTML = `
+        <strong>${type === 'error' ? '⚠️ Error' : type === 'success' ? '✓ Success' : 'ℹ️ Info'}:</strong> ${message}
+      `;
+      container.innerHTML = '';
+      container.appendChild(alert);
+
+      setTimeout(() => {
+        alert.remove();
+      }, 4000);
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    // Navigation
+    function openAdmin() {
+      window.location.href = 'admin.html';
+    }
+
+    function openViewer() {
+      window.location.href = 'viewer.html';
+    }
+
+    // Load data on page load
+    loadData();
+  </script>
+</body>
+</html>
